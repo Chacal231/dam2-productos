@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Productos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>Catálogo de productos</h1>
+
+  @if (loading()) {
+    <div class="loading">
+      <ion-spinner></ion-spinner>
+      <p>Cargando productos...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <ion-card color="danger">
+      <ion-card-header>
+        <ion-card-title>Error</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ error() }}</p>
+        <ion-button (click)="loadProducts()">Reintentar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  @if (!loading() && !error()) {
+    <p>
+      Mostrando página <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong> (Total: {{ total() }} productos)
+    </p>
+
+    <!-- Puntos 6: Vista basada en Cards -->
+    <ion-grid>
+      <ion-row>
+        @for (product of pagedProducts; track product.id) {
+          <ion-col size="12" size-sm="6" size-md="4" size-lg="3">
+            <ion-card class="product-card">
+              <img [src]="product.thumbnail" [alt]="product.title" class="product-img" />
+              <ion-card-header>
+                <div class="card-top-bar">
+                  <ion-badge color="primary">{{ product.category }}</ion-badge>
+                  <ion-badge color="warning">
+                    <ion-icon name="star"></ion-icon> {{ product.rating }}
+                  </ion-badge>
+                </div>
+                <ion-card-title>{{ product.title }}</ion-card-title>
+                <ion-card-subtitle>{{ product.brand || 'Sin marca' }}</ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                <div class="card-footer-info">
+                  <span class="price">{{ product.price | currency:'EUR' }}</span>
+                  <span class="stock">Stock: {{ product.stock }}</span>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+
+    <!-- Punto 7: Paginación -->
+    <div class="pagination-controls ion-margin-top ion-text-center">
+      <ion-button [disabled]="skip() === 0" (click)="prevPage()">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+      
+      <span class="page-indicator">Página {{ currentPage }} / {{ totalPages }}</span>
+
+      <ion-button [disabled]="skip() + limit >= total()" (click)="nextPage()">
+        Siguiente
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  }
+</ion-content>
