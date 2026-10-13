@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <!-- Botón para volver al Inicio -->
+    <ion-buttons slot="start">
+      <ion-button routerLink="/inicio">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Gestión de Tareas (TODOs)</ion-title>
+
+    <!-- Botón de Modo Oscuro -->
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleDarkMode()">
+        <ion-icon slot="icon-only" [name]="isDarkMode ? 'sun-outline' : 'moon-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Botones de filtrado -->
+  <ion-toolbar color="light">
+    <ion-segment [value]="filter" (ionChange)="onFilterChange($event)">
+      <ion-segment-button value="all">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="pending">
+        <ion-label>Pendientes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        <ion-label>Completadas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Spinner de Carga -->
+  @if (loading) {
+    <div class="ion-text-center ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando tareas...</p>
+    </div>
+  }
+
+  <!-- Mensaje de Error -->
+  @if (error) {
+    <div class="ion-text-center ion-padding">
+      <p style="color: var(--ion-color-danger);">{{ error }}</p>
+      <ion-button (click)="loadTodos()">Reintentar</ion-button>
+    </div>
+  }
+
+  <!-- Lista de TODOs -->
+  @if (!loading && !error) {
+    <ion-list>
+      @for (todo of todos; track todo.id) {
+        <ion-item>
+          <ion-checkbox [checked]="todo.completed" slot="start" disabled></ion-checkbox>
+          <ion-label [class.completed-title]="todo.completed">
+            <h2>{{ todo.title }}</h2>
+            <p>ID de usuario: {{ todo.userId }}</p>
+          </ion-label>
+          <ion-badge [color]="todo.completed ? 'success' : 'warning'" slot="end">
+            {{ todo.completed ? 'Completada' : 'Pendiente' }}
+          </ion-badge>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-label class="ion-text-center">
+            No hay tareas en esta categoría.
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+</ion-content>

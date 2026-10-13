@@ -19,6 +19,12 @@ export const routes: Routes = [
         .then(m => m.ProductosPage)
   },
   {
+    path: 'todos',
+    loadComponent: () =>
+      import('./pages/todos/todos.page')
+        .then(m => m.TodosPage)
+  },
+  {
     path: '**',
     redirectTo: 'inicio'
   }

@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Inicio</ion-title>
+    <!-- Botón de Modo Oscuro / Claro en la cabecera -->
     <ion-buttons slot="end">
       <ion-button (click)="toggleDarkMode()">
         <ion-icon slot="icon-only" [name]="isDarkMode ? 'sun-outline' : 'moon-outline'"></ion-icon>
@@ -17,8 +18,13 @@
     para consumir una API REST.
   </p>
 
-  <!-- Añadimos color="primary" -->
+  <!-- Botón de Productos -->
   <ion-button color="primary" routerLink="/productos">
     Ver productos
+  </ion-button>
+
+  <!-- Botón de Tareas (TODOs) -->
+  <ion-button color="secondary" routerLink="/todos">
+    Ver tareas
   </ion-button>
 </ion-content>
